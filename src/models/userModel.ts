@@ -6,7 +6,7 @@ class User extends Model {
     public name!: string;
     public email!: string;
     public password!: string;
-    public role!: string;
+    public role!: 'client' | 'owner';
 }
 
 User.init(
@@ -24,6 +24,9 @@ User.init(
             type: DataTypes.STRING,
             allowNull: false,
             unique: true,
+            validate: {
+                isEmail: true,
+            }
         },
         password: {
             type: DataTypes.STRING,
@@ -32,12 +35,14 @@ User.init(
         role: {
             type: DataTypes.ENUM('client', 'owner'),
             allowNull: false,
+            defaultValue: 'client',
         },
     },
     {
         sequelize,
         modelName: 'User',
         tableName: 'users',
+        timestamps: true,
     }
 );
 
